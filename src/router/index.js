@@ -4,8 +4,13 @@ import { createRouter, createWebHistory } from 'vue-router'
  export const routes = [
     {
       path: '/',
-      name: '/Main-Home',
-      component:() => import('@/Views/Main-Home.vue'),
+      name: '/BoasVindas',
+      component:() => import('@/Views/Boas-Vndas.vue'),
+   },
+   {
+     path: '/MainHome',
+     name: 'MainHome',
+     component: () => import('@/Views/Main-Home.vue')
    },
    {
      path: '/NavBar',
@@ -62,6 +67,21 @@ import { createRouter, createWebHistory } from 'vue-router'
      path: '/FormArea',
      name: 'Formarea',
      component: () => import('@/Views/Componentes/FormArea.vue')
+   },
+   {
+     path: '/Odontologia',
+     name: 'Odontologia',
+     component: ()=> import('@/Views/OdontologiaArea.vue')
+   },
+   {
+     path: '/Enfermagem',
+     name: 'Enfermagem',
+     component: () => import('@/Views/EnfermagemArea.vue') 
+   },
+   {
+     path: '/Analises',
+     name: 'Analises',
+     component: ()=> import('@/Views/AnalisesClinicasArea.vue')
    }
   ]
 

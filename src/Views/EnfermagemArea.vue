@@ -13,7 +13,7 @@
         <!-- Cabeçalho -->
         <div class="text-center space-y-2">
           <h2 class="text-2xl sm:text-3xl font-extrabold text-[#004E7D]">
-           Gestão Emp.
+         Enfermagem
           </h2>
           <p class="text-gray-500 text-sm sm:text-base">
             Deixe o seu parecer e avaliação abaixo.

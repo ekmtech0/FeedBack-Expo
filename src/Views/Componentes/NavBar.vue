@@ -8,12 +8,12 @@
       <!-- Logo -->
       <div class="flex items-center space-x-3">
         <img
-          src="/public/img/ej branco.png"
+          :src="LogoBranco"
           alt="Expo Jovem Logo"
           class="h-14 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]"
         />
         <span class="text-xl font-bold tracking-wide hidden sm:block"
-          >Expo Jovem 2025</span
+          >2025</span
         >
       </div>
 
@@ -98,7 +98,7 @@
 
 <script setup>
 import { ref } from "vue";
-
+import LogoBranco from '@/assets/img/ej branco.png'
 const menuOpen = ref(false);
 </script>
 

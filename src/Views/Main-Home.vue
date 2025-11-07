@@ -29,7 +29,7 @@
         <div
           v-for="(area, index) in Areas"
           :key="index"
-          @click="irPara(area.link)"
+          @click="irPara(area.link,  area.nome)"
           class="group cursor-pointer relative bg-white/90 hover:bg-[#009FE3]/10 border border-[#009FE3]/20 shadow-md hover:shadow-lg rounded-xl transition-all duration-500 p-6 sm:p-8 flex flex-col justify-between"
         >
           <!-- Nome da área -->
@@ -96,12 +96,9 @@ const Areas = ref([
   { nome: "Pastelaria", expositor: "2", link: "/PastelariaArea" },
 ]);
 
-function irPara(path) {
-    router.push(path);
+function irPara(path , nome) {
+    router.push({ path, query: { area: nome } });
 
-    function EnviarNome(nome) {
-         emit('area-enviada', nome);
-    }
-
+         emit('area-enviada', nome)
 }
 </script>
