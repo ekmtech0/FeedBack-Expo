@@ -82,8 +82,44 @@ import { createRouter, createWebHistory } from 'vue-router'
      path: '/Analises',
      name: 'Analises',
      component: ()=> import('@/Views/AnalisesClinicasArea.vue')
+   },
+   {
+     path: '/Dashboard',
+     name: 'Dashboard',
+     component: () => import('@/Views/ADM/DashboardADM.vue')
+   },
+   {
+     path: '/SideBar',
+     name: 'Sidebar',
+     component: ()=> import('@/Views/ADM/SideBar.vue')
+   },
+   {
+     path: '/Area',
+     name: 'Area',
+     component: ()=> import('@/Views/ADM/AreaAdm.vue')
+   },
+   {
+     path: '/feedback',
+     name: 'feedback',
+     component: ()=> import('@/Views/ADM/FeedbackAdm.vue')
+     
+   },
+   {
+     path: '/estatistica',
+     name: 'estatistica',
+     component: ()=> import('@/Views/ADM/EstatisticaAdm.vue')
+   },
+   {
+     path: '/headerAdm',
+     name: 'header',
+     commponent: () => import('@/Views/ADM/HeaderAdm.vue')
+   },
+   {
+     path: '/Expositor',
+     name: 'Expositor',
+     component: () => import('@/Views/ADM/ExpositorAdm.vue')
    }
-  ]
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

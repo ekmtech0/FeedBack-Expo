@@ -29,7 +29,6 @@
 
 <script setup>
 import QrcodeVue from "qrcode.vue";
-import { ref } from "vue";
 
 const props = defineProps({
   area: String,

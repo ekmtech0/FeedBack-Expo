@@ -116,3 +116,76 @@ const menuOpen = ref(false);
   transform: translateY(-10px);
 }
 </style>
+
+
+
+
+<!-- 
+(b) Dashboard Administrativo
+
+Menu lateral com ícones:
+
+Dashboard
+
+Áreas
+
+Feedbacks
+
+Estatísticas
+
+Configurações
+
+Conteúdo principal:
+
+Cards com números principais:
+
+Total de visitantes
+
+Total de feedbacks
+
+Média geral de satisfação
+
+Gráficos (linhas, donuts e barras)
+
+Ranking das áreas com melhores notas
+
+Comentários recentes (últimos feedbacks)
+
+(c) Gestão de Áreas
+
+Tabela com:
+
+Nome da área
+
+QR Code gerado automaticamente
+
+Número de feedbacks
+
+Botões: “Editar”, “Apagar”, “Ver QR Code”
+
+Botão “Adicionar nova área”
+
+Opção de gerar QR Code em imagem ou link
+
+(d) Gestão de Feedbacks
+
+Tabela com todos os feedbacks recebidos:
+
+Colunas: Área, Nome, Avaliação, Comentário, Data
+
+Filtro por área, busca por nome
+
+Opção “Exportar feedbacks” (CSV/PDF)
+
+(e) Página de Estatísticas Detalhadas
+
+Gráficos por área (linhas, barras, donuts)
+
+Filtro por período (hoje / semana / evento completo)
+
+Percentual de satisfação geral
+
+Curva de participação (número de feedbacks por hora) -->
+
+
+
