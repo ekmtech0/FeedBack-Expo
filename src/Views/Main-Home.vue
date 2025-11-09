@@ -87,13 +87,13 @@ const emit = defineEmits(['area-enviada']);
 const router = useRouter();
 
 const Areas = ref([
-  { nome: "Informática", expositor: "2", link: "/InformaticaArea" },
-  { nome: "Eletricidade", expositor: "1", link: "/EletricidadeArea" },
-  { nome: "Frio e Climatização", expositor: "1", link: "/FrioArea" },
-  { nome: "Gestão Empresarial", expositor: "2", link: "/GestaoArea" },
-  { nome: "Mecânica", expositor: "1", link: "/MecanicaArea" },
-  { nome: "Saúde", expositor: "8", link: "/SaudeArea" },
-  { nome: "Pastelaria", expositor: "2", link: "/PastelariaArea" },
+  { nome: "Informática", expositor: "2", link: "/area/:id" },
+  { nome: "Eletricidade", expositor: "1", link: "" },
+  { nome: "Frio e Climatização", expositor: "1", link: "" },
+  { nome: "Gestão Empresarial", expositor: "2", link: "" },
+  { nome: "Mecânica", expositor: "1", link: "" },
+  { nome: "Saúde", expositor: "8", link: "" },
+  { nome: "Pastelaria", expositor: "2", link: "" },
 ]);
 
 function irPara(path , nome) {

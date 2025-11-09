@@ -22,42 +22,8 @@ import { createRouter, createWebHistory } from 'vue-router'
      name: '/boasVindas',
      component: () => import('@/Views/Boas-Vndas.vue')
    },
-   {
-     path: '/InformaticaArea',
-     name: 'InformaticaArea',
-     component: () => import('@/Views/InformaticaArea.vue')
-   },
-   {
-     path: '/EletricidadeArea',
-     name: 'EletricidadeArea',
-     component: ()=> import('@/Views/EletricidadeArea.vue')
-   },
-   {
-     path: '/FrioArea',
-     name: 'FrioArea',
-     component: () => import('@/Views/FrioAre.vue')
-   },
-   {
-     path: '/GestaoArea',
-     name: '/GestaoArea',
-     component: ()=> import('@/Views/GestaoArea.vue')
-   },
-   {
-     path: '/MecanicaArea',
-     name: '/MecanicaArea',
-     component: ()=> import('@/Views/MecanicaArea.vue')
-   },
-   {
-     path: '/SaudeArea',
-     name: 'SaudeArea',
-     component: ()=> import('@/Views/SaudeArea.vue')
-   },
-
-   {
-     path: '/PastelariaArea',
-     name: 'PastelariaArea',
-     component: ()=> import('@/Views/PastelariaArea.vue')
-   },
+  
+ 
    {
      path: '/SlideArea',
      name: 'SlideArea',
@@ -68,21 +34,7 @@ import { createRouter, createWebHistory } from 'vue-router'
      name: 'Formarea',
      component: () => import('@/Views/Componentes/FormArea.vue')
    },
-   {
-     path: '/Odontologia',
-     name: 'Odontologia',
-     component: ()=> import('@/Views/OdontologiaArea.vue')
-   },
-   {
-     path: '/Enfermagem',
-     name: 'Enfermagem',
-     component: () => import('@/Views/EnfermagemArea.vue') 
-   },
-   {
-     path: '/Analises',
-     name: 'Analises',
-     component: ()=> import('@/Views/AnalisesClinicasArea.vue')
-   },
+   
    {
      path: '/Dashboard',
      name: 'Dashboard',
@@ -118,7 +70,13 @@ import { createRouter, createWebHistory } from 'vue-router'
      path: '/Expositor',
      name: 'Expositor',
      component: () => import('@/Views/ADM/ExpositorAdm.vue')
-   }
+   },
+    {
+    path: "/area/:id", // <- Rota dinâmica
+    name: "AreaFeedback",
+    component:() => import ('@/Views/AreaFeedback.vue'),
+    props: true,
+  },
 ]
 
 const router = createRouter({
