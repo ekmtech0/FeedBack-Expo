@@ -87,6 +87,7 @@ const Areas = ref([])
 onMounted(async () => {
   try {
     const resp = await api.get("areas")
+    console.log(resp.data)
     // mapeia para o formato usado no template
     Areas.value = resp.data.map(a => ({
       id: a.id,

@@ -6,18 +6,20 @@ import SlideArea from "./SlideArea.vue";
 import ModaslFeedback from "./Componentes/ModaslFeedback.vue";
 import api from "@/request/api"; // importa o axios configurado
 import { onMounted } from "vue";
+import QrcodeArea from "./Componentes/QrcodeArea.vue";
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
+const route = useRoute();
 const browserId = ref("")
-
+const url = ref("");
 onMounted(async () => {
+  url.value = window.location.href
   const fp = await FingerprintJS.load()
   const result = await fp.get()
   browserId.value = result.visitorId   // string única para o navegador
 })
 
-const route = useRoute();
 
 // id da área vem dos params
 const areaId = Number(route.params.id)
@@ -117,6 +119,7 @@ async function enviarFeedback() {
       </div>
     </div>
 
+    <QrcodeArea :link="url" :area="areaName"/>
     <ModaslFeedback v-if="Aparecer" />
   </section>
 </template>

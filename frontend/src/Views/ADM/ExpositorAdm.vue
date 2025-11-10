@@ -47,12 +47,12 @@
                     <td class="px-6 py-4">
                       <div
                         class="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-white"
-                        :class="corFoto(expositor.nome)"
+                        :class="corFoto(expositor.name)"
                       >
-                        {{ iniciais(expositor.nome) }}
+                        {{ iniciais(expositor.name) }}
                       </div>
                     </td>
-                    <td class="px-6 py-4 font-medium text-gray-800">{{ expositor.nome }}</td>
+                    <td class="px-6 py-4 font-medium text-gray-800">{{ expositor.name }}</td>
                     <td class="px-6 py-4 text-gray-600">{{ expositor.area }}</td>
                     <td class="px-6 py-4 text-right space-x-3">
                       <button
@@ -85,12 +85,12 @@
                 <div class="flex items-center gap-3">
                   <div
                     class="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-white text-sm"
-                    :class="corFoto(expositor.nome)"
+                    :class="corFoto(expositor.name)"
                   >
-                    {{ iniciais(expositor.nome) }}
+                    {{ iniciais(expositor.name) }}
                   </div>
                   <div>
-                    <p class="font-semibold text-gray-900">{{ expositor.nome }}</p>
+                    <p class="font-semibold text-gray-900">{{ expositor.name }}</p>
                     <p class="text-gray-600 text-sm mt-1">Área: {{ expositor.area }}</p>
                   </div>
                 </div>
@@ -119,7 +119,7 @@
           <div class="flex flex-col gap-3">
             <label class="text-sm font-medium text-gray-700">Nome do Expositor</label>
             <input
-              v-model="form.nome"
+              v-model="form.name"
               type="text"
               placeholder="Expositor"
               class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-azul focus:ring-1"
@@ -127,11 +127,11 @@
 
             <label class="text-sm font-medium text-gray-700 mt-2">Área de Exposição</label>
             <select
-              v-model="form.area"
+              v-model="form.areaId"
               class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-azul focus:ring-1"
             >
               <option value="">Selecionar área</option>
-              <option v-for="area in areas" :key="area">{{ area }}</option>
+              <option v-for="area in areas" :key="area.id" :value="area.id">{{ area.name }}</option>
             </select>
           </div>
 
@@ -153,63 +153,87 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import SideBar from './SideBar.vue'
 import HeaderAdm from './HeaderAdm.vue'
+import api from '@/request/api'
 
+const expositores = ref([])
+const areas = ref([])
 
-const expositores = ref([
-  { nome: 'Victor Makuka', area: 'Informática' },
-  { nome: 'Edvaldo Mendes', area: 'Saúde' },
-  { nome: 'Abílio Junior', area: 'Mecânica' },
-  { nome: 'Aricleni dos Santos', area: 'Pastelaria' }
-])
+// carregar expositores + áreas
+onMounted(async () => {
+  try {
+    const [respAreas, respExpositores] = await Promise.all([
+      api.get('areas'),
+      api.get('expositantes')
+    ])
+    areas.value = respAreas.data
+    expositores.value = respExpositores.data.map(ex => ({
+      ...ex,
+      area: areas.value.find(a => a.id === ex.areaId)?.name || 'Área desconhecida'
+    }))
+  } catch (err) {
+    console.error('Erro ao carregar dados:', err)
+  }
+})
 
-const areas = ['Informática', 'Saúde', 'Mecânica', 'Pastelaria', 'Moda', 'Educação']
-
-// Estado modal
+// modal + formulário
 const mostrarModal = ref(false)
 const editando = ref(false)
-const form = ref({ nome: '', area: '' })
 const editIndex = ref(null)
+const form = ref({ name: '', areaId: '' })
 
-// Funções
+// abrir / editar
 const abrirModal = () => {
   editando.value = false
-  form.value = { nome: '', area: '' }
+  form.value = { name: '', areaId: '' }
   mostrarModal.value = true
 }
 
 const editarExpositor = (index) => {
   editando.value = true
   editIndex.value = index
-  form.value = { ...expositores.value[index] }
+  form.value = { name: expositores.value[index].name, areaId: expositores.value[index].areaId }
   mostrarModal.value = true
 }
 
-const salvarExpositor = () => {
-  if (!form.value.nome || !form.value.area) return
-  if (editando.value) expositores.value[editIndex.value] = { ...form.value }
-  else expositores.value.push({ ...form.value })
-  mostrarModal.value = false
+// salvar expositor
+const salvarExpositor = async () => {
+  if (!form.value.name || !form.value.areaId) return
+
+  try {
+    const { data } = await api.post('expositantes', form.value)
+    expositores.value.push({
+      ...data,
+      area: areas.value.find(a => a.id === data.areaId)?.name || 'Área desconhecida'
+    })
+    mostrarModal.value = false
+  } catch (error) {
+    console.error('Erro ao salvar expositor:', error)
+  }
 }
 
+// eliminar
 const eliminarExpositor = (index) => {
-  if (confirm(`Tens certeza que queres eliminar o expositor "${expositores.value[index].nome}"?`)) {
-    expositores.value.splice(index, 1)
-  }
+  expositores.value.splice(index, 1)
 }
 
 const fecharModal = () => (mostrarModal.value = false)
 
-// Iniciais do nome
-const iniciais = nome => nome.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2)
-const corFoto = nome => {
+// helpers
+const iniciais = (nome) => {
+  if (!nome) return '?'
+  return nome.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2)
+}
+
+const corFoto = (nome) => {
   const cores = ['bg-blue-500', 'bg-green-500', 'bg-pink-500', 'bg-yellow-500', 'bg-purple-500']
+  if (!nome) return 'bg-gray-400'
   return cores[nome.length % cores.length]
 }
 </script>
 
 <style scoped>
-/* a base já é Tailwind */
+/* já estás a usar Tailwind */
 </style>

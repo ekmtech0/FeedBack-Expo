@@ -13,25 +13,26 @@ public static class ExpositanteEndpoint
         // CREATE
         endpoints.MapPost("/", async (AppDbContext db, ExpositanteDto model) =>
         {
-            var exists = await db.Expositante
-                .AnyAsync(e => e.AreaId == model.AreaId);
-            if (exists)
-            {
-                return Results.Conflict("Este expositante já está cadastrado nesta área.");
-            }
-            var area = await db.Expositante.AnyAsync(c => c.AreaId == model.AreaId);
-            if(!area)
-                return Results.Conflict("Esta area não existe");
+            var exists = await db.Areas
+                .AnyAsync(a => a.Id == model.AreaId);
 
-            await db.Expositante.AddAsync(new Expositante
+            if (!exists)
+            {
+                return Results.Conflict("Esta área não existe");
+            }
+
+            var expositor = new Expositante
             {
                 Name = model.Name,
                 AreaId = model.AreaId
-            });
+            };
+
+            await db.Expositante.AddAsync(expositor);
             await db.SaveChangesAsync();
 
-            return Results.Ok(model);
+            return Results.Ok(expositor);
         });
+
 
         // READ ALL
         endpoints.MapGet("/", async (AppDbContext db) =>
@@ -70,7 +71,7 @@ public static class ExpositanteEndpoint
         });
 
         // UPDATE
-        endpoints.MapPut("/{id}", async (AppDbContext db, int id, Expositante input) =>
+        endpoints.MapPut("/{id}", async (AppDbContext db, int id, ExpositanteDto model) =>
         {
             var expositante = await db.Expositante.FirstOrDefaultAsync(e => e.Id == id);
             if (expositante is null)
@@ -78,8 +79,8 @@ public static class ExpositanteEndpoint
                 return Results.NotFound();
             }
 
-            expositante.Name = input.Name;
-            expositante.AreaId = input.AreaId;
+            expositante.Name = model.Name;
+            expositante.AreaId = model.AreaId;
 
             await db.SaveChangesAsync();
 
@@ -104,9 +105,7 @@ public static class ExpositanteEndpoint
 }
 public class ExpositanteDto
 {
-    public int Id { get; set; }
     public string Name { get; set; } = null!;
     public int AreaId { get; set; }
-    public string AreaName { get; set; } = null!;
 }
 
