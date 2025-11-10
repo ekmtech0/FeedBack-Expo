@@ -6,7 +6,7 @@
       <HeaderAdm />
 
       <div class="max-w-7xl mx-auto px-4 py-6">
-        <!-- Título + Ações -->
+        <!-- Título -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-6">
           <h2 class="font-bold text-xl text-azul flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-azul" viewBox="0 0 24 24" fill="currentColor">
@@ -15,8 +15,6 @@
             </svg>
             Gestão de Feedbacks
           </h2>
-
-      
         </div>
 
         <!-- Filtros -->
@@ -41,7 +39,7 @@
           </div>
         </div>
 
-        <!-- Tabela -->
+        <!-- Tabela Desktop -->
         <div class="mt-6 bg-white rounded-xl shadow overflow-hidden">
           <div class="overflow-x-auto">
             <table class="min-w-full table-auto hidden md:table">
@@ -56,16 +54,14 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(fb, index) in feedbacksFiltrados"
-                  :key="index"
+                  v-for="fb in feedbacksFiltrados"
+                  :key="fb.id"
                   class="border-t hover:bg-gray-50 transition"
                 >
                   <td class="px-6 py-4 text-gray-800 font-medium">{{ fb.area }}</td>
                   <td class="px-6 py-4 text-gray-700">{{ fb.nome }}</td>
                   <td class="px-6 py-4">
-                    <span
-                      class="bg-azul/10 text-azul font-semibold px-3 py-1 rounded-lg text-sm"
-                    >
+                    <span class="bg-azul/10 text-azul font-semibold px-3 py-1 rounded-lg text-sm">
                       {{ fb.avaliacao }}/5
                     </span>
                   </td>
@@ -79,8 +75,8 @@
           <!-- Cards Mobile -->
           <div class="md:hidden divide-y bg-white">
             <div
-              v-for="(fb, index) in feedbacksFiltrados"
-              :key="index"
+              v-for="fb in feedbacksFiltrados"
+              :key="fb.id"
               class="p-4 hover:bg-gray-50"
             >
               <p class="font-semibold text-gray-900">{{ fb.nome }}</p>
@@ -99,24 +95,36 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import SideBar from './SideBar.vue'
 import HeaderAdm from './HeaderAdm.vue'
+import api from '@/request/api'
 
-const feedbacks = ref([
-  { area: 'Informática', nome: 'Victor Makuka', avaliacao: 5, comentario: 'Eles são do outro planeta', data: '2025-11-02' },
-  { area: 'Saúde', nome: 'Edvaldo', avaliacao: 4, comentario: 'Não gosto da Saúde', data: '2025-11-03' },
-  { area: 'Mecânica', nome: 'Abílio Junior', avaliacao: 3, comentario: 'Poderia ter mais interação.', data: '2025-11-04' },
-  { area: 'Pastelaria', nome: 'Aricleni dos Santos', avaliacao: 5, comentario: 'Comi bué, até estou repleto!', data: '2025-11-05' },
-])
+const feedbacks = ref([])
+
+onMounted(async () => {
+  try {
+    const resp = await api.get("/feedbacks")
+    feedbacks.value = resp.data.map(f => ({
+      id: f.id,
+      nome: f.name,              // backend: name → frontend: nome
+      area: f.area,
+      avaliacao: f.rating,       // backend: rating → frontend: avaliacao
+      comentario: f.comentario,
+      data: f.data ?? new Date().toISOString().split("T")[0] // fallback se não vier data
+    }))
+  } catch (err) {
+    console.error("Erro ao carregar feedbacks", err)
+  }
+})
 
 const busca = ref('')
 const filtroArea = ref('')
 
-// Gera lista única de áreas
+// lista única de áreas
 const areasUnicas = computed(() => [...new Set(feedbacks.value.map(f => f.area))])
 
-// Filtra feedbacks
+// filtro por nome e área
 const feedbacksFiltrados = computed(() => {
   return feedbacks.value.filter(fb => {
     const buscaNome = fb.nome.toLowerCase().includes(busca.value.toLowerCase())
@@ -124,7 +132,6 @@ const feedbacksFiltrados = computed(() => {
     return buscaNome && filtroPorArea
   })
 })
-
 </script>
 
 <style scoped>

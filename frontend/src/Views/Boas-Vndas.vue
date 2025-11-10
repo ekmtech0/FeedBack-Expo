@@ -27,12 +27,12 @@
         class="lg:h-[400px] h-[250px] object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] animate-float"
       />
 
-      <a
+      <button
         @click="irPara('/MainHome')"
         class="mt-[-30px] bg-white/90 text-[#009FE3] font-semibold rounded-2xl px-8 py-3 text-sm lg:text-lg shadow-lg hover:scale-105 hover:bg-white transition-all duration-300 ease-in-out cursor-pointer"
       >
         Explorar Áreas
-      </a>
+    </button>
     </div>
   </section>
 </template>

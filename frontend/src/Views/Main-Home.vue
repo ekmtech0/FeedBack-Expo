@@ -1,7 +1,7 @@
 <template>
   <section class="min-h-screen w-full bg-gradient-to-b from-[#009FE3]/20 via-white to-[#009FE3]/10">
     <!-- Navbar (podes importar quando quiser) -->
-     
+
     <NavBar />
      <SlideArea class="mt-8"/>
     <!-- Conteúdo principal -->
@@ -29,7 +29,7 @@
         <div
           v-for="(area, index) in Areas"
           :key="index"
-          @click="irPara(area.link,  area.nome)"
+          @click="irPara(area)"
           class="group cursor-pointer relative bg-white/90 hover:bg-[#009FE3]/10 border border-[#009FE3]/20 shadow-md hover:shadow-lg rounded-xl transition-all duration-500 p-6 sm:p-8 flex flex-col justify-between"
         >
           <!-- Nome da área -->
@@ -75,30 +75,38 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import NavBar from "./Componentes/NavBar.vue";
 import SlideArea from "./SlideArea.vue";
-import { defineEmits } from 'vue';
-
-const emit = defineEmits(['area-enviada']);
-
+import api from "@/request/api";
 
 const router = useRouter();
+const Areas = ref([])
 
-const Areas = ref([
-  { nome: "Informática", expositor: "2", link: "/area/:id" },
-  { nome: "Eletricidade", expositor: "1", link: "" },
-  { nome: "Frio e Climatização", expositor: "1", link: "" },
-  { nome: "Gestão Empresarial", expositor: "2", link: "" },
-  { nome: "Mecânica", expositor: "1", link: "" },
-  { nome: "Saúde", expositor: "8", link: "" },
-  { nome: "Pastelaria", expositor: "2", link: "" },
-]);
+onMounted(async () => {
+  try {
+    const resp = await api.get("areas")
+    // mapeia para o formato usado no template
+    Areas.value = resp.data.map(a => ({
+      id: a.id,
+      nome: a.name,
+      expositor: a.expositantes,
+      feedbacks: a.feedbacks,
+      link: `/area/${a.id}`
+    }))
+  } catch (err) {
+    console.error("Erro ao carregar áreas", err)
+  }
+})
 
-function irPara(path , nome) {
-    router.push({ path, query: { area: nome } });
-
-         emit('area-enviada', nome)
+function irPara(area) {
+  router.push({
+    name: "AreaFeedback",
+    params: { id: area.id },
+    query: { nome: area.nome }
+  })
 }
+
 </script>
+
